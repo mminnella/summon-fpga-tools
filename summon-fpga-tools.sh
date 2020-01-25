@@ -51,6 +51,26 @@ YOSYS_CONFIG=${YOSYS_CONFIG:-}
 IVERILOG_EN=${IVERILOG_EN:-1}
 IVERILOG_GIT=${IVERILOG_GIT:-v10-branch}
 
+#Formal tools
+SYMBIYOSYS_EN=${SYMBIYOSYS_EN:-1}
+SYMBIYOSYS_GIT=${SYMBIYOSYS_GIT:-master}
+YICES2_EN=${YICES2_EN:-1}
+YICES2_GIT=${YICES2_GIT:-master}
+Z3_EN=${Z3_EN:-1}
+Z3_GIT=${Z3_GIT:-master}
+#todo superprove
+AVY_EN=${AVY_EN:-1}
+AVY_GIT=${AVI_GIT:-master}
+BOOLECTOR_EN=${BOOLECTOR_EN:-1}
+BOOLECTOR_GIT=${BOOLECTOR_GIT:-master}
+
+#Verilator
+VERILATOR_EN=${VERILATOR_EN:-1}
+VERILATOR_GIT=${VERILATOR_GIT:-master}
+GTKWAVE_EN=${GTKWAVE_EN:-1}
+GTKWAVE_GIT=${GTKWAVE_GIT:-master}
+
+
 # Override automatic detection of cpus to compile on
 CPUS=${CPUS:-}
 
@@ -100,6 +120,16 @@ DEFAULT_NEXTPNR=
 DEFAULT_YOSYS=yosys-0.8
 DEFAULT_IVERILOG_VERSION=v10_2
 DEFAULT_IVERILOG=iverilog-${DEFAULT_IVERILOG_VERSION}
+DEFAULT_SYMBIYOSYS=
+DEFAULT_YICES2=
+DEFAULT_Z3=
+DEFAULT_SUPERPROVE=
+DEFAULT_AVY=
+DEFAULT_BOOLECTOR=
+DEFAULT_VERILATOR=
+DEFAULT_GTKWAVE=
+
+
 
 ICESTORM=${ICESTORM:-${DEFAULT_ICESTORM}}
 PRJTRELLIS=${PRJTRELLIS:-${DEFAULT_PRJTRELLIS}}
@@ -108,6 +138,15 @@ NEXTPNR=${NEXTPNR:-${DEFAULT_NEXTPNR}}
 YOSYS=${YOSYS:-${DEFAULT_YOSYS}}${IVERILOG}
 IVERILOG_VERSION=${IVERILOG_VERSION:-${DEFAULT_IVERILOG_VERSION}}
 IVERILOG=${IVERILOG:-${DEFAULT_IVERILOG}}
+SYMBIYOSYS=${SYMBIYOSYS:-${DEFAULT_SYMBIYOSYS}}
+YICES2=${YICES2:-${DEFAULT_YICES2}}
+Z3=${Z3:-${DEFAULT_Z3}}
+SUPERPROVE=${SUPERPROVE:-${DEFAULT_SUPERPROVE}}
+AVY=${AVY:-${DEFAULT_AVY}}
+BOOLECTOR=${BOOLECTOR:-${DEFAULT_BOOLECTOR}}
+VERILATOR=${VERILATOR:-${DEFAULT_VERILATOR}}
+GTKWAVE=${GTKWAVE:-${DEFAULT_GTKWAVE}}
+
 
 ##############################################################################
 # Print settings
@@ -132,6 +171,23 @@ echo "YOSYS_CONFIG=$YOSYS_CONFIG"
 echo "IVERILOG_VERSION=$IVERILOG_VERSION"
 echo "IVERILOG=$IVERILOG"
 echo "IVERILOG_GIT=$IVERILOG_GIT"
+echo "SYMBIYOSYS=$SYMBIYOSYS"
+echo "SYMBIYOSYS_GIT=$SYMBIYOSYS_GIT"
+echo "YICES2=$YICES2"
+echo "YICES2_GIT=$YICES2_GIT"
+echo "Z3=$Z3"
+echo "Z3_GIT=$Z3_GIT"
+echo "SUPERPROVE=$SUPERPROVE"
+echo "SUPERPROVE_GIT=$SUPERPROVE_GIT"
+echo "AVY=$AVY"
+echo "AVY_GIT=$AVY_GIT"
+echo "BOOLECTOR=$BOOLECTOR"
+echo "BOOLECTOR_GIT=$BOOLECTOR_GIT"
+echo "VERILATOR=$VERILATOR"
+echo "VERILATOR_GIT=$VERILATOR_GIT"
+echo "GKWAVE=$GTKWAVE"
+echo "GTKWAVE_GIT=$GTKWAVE_GIT"
+
 echo "CPUS=$CPUS"
 
 ##############################################################################
@@ -386,6 +442,56 @@ if [ ${IVERILOG_EN} != 0 ]; then
 	fi
 fi
 
+if [ ${SYMBIYOSYS_EN} != 0 ]; then
+	if [ "x${SYMBIYOSYS_GIT}" == "x" ]; then
+		log "There is no symbiyosys stable release download server yet!"
+                exit 1
+		#fetch ${SYMBIYOSYS} https://github.com/YosysHQ/symbiyosys/archive/${SYMBIYOSYS}.tar.gz
+	else
+		clone symbiyosys ${SYMBIYOSYS_GIT} git://github.com/YosysHQ/symbiyosys.git
+	fi
+fi
+
+if [ ${YICES2_EN} != 0 ]; then
+        if [ "x${YICES2_GIT}" == "x" ]; then
+                fetch ${YICES2} https://github.com/SRI-CSL/archive/${YICES2}.tar.gz
+        else
+                clone yices2 ${YICES2_GIT} git://github.com/SRI-CSL/yices2.git
+        fi
+fi
+
+if [ ${Z3_EN} != 0 ]; then
+        if [ "x${Z3_GIT}" == "x" ]; then
+                fetch ${Z3} https://github.com/Z3Prover/archive/${Z3}.tar.gz
+        else
+                clone z3 ${Z3_GIT} git://github.com/Z3Prover/z3.git
+        fi
+fi
+
+if [ ${AVY_EN} != 0 ]; then
+        if [ "x${AVY_GIT}" == "x" ]; then
+                fetch ${Z3} https://bitbucket.org/arieg/avy/get/${Z3}.tar.gz
+        else
+                clone avy ${AVY_GIT} https://bitbucket.org/arieg/extavy.git
+        fi
+fi
+
+if [ ${BOOLECTOR_EN} != 0 ]; then
+        if [ "x${BOOLECTOR_GIT}" == "x" ]; then
+                fetch ${BOOLECTOR} https://github.com/boolector/boolector/archive/${Z3}.tar.gz
+        else
+                clone boolector ${BOOLECTOR_GIT} git://github.com/boolector/boolector
+        fi
+fi
+
+if [ ${VERILATOR_EN} != 0 ]; then
+        if [ "x${VERILATOR_GIT}" == "x" ]; then
+                fetch ${VERILATOR} https://github.com/verilator/verilator/archive/${Z3}.tar.gz
+        else
+                clone verilator ${VERILATOR_GIT} git://github.com/verilator/verilator
+        fi
+fi
+
 ##############################################################################
 # Build tools
 ##############################################################################
@@ -494,4 +600,105 @@ if [ ${IVERILOG_EN} != 0 ] && [ ! -e ${STAMPS}/${IVERILOG}.build ]; then
     log "Cleaning up ${IVERILOG}"
     touch ${STAMPS}/${IVERILOG}.build
     rm -rf build/* ${IVERILOG}
+fi
+
+if [ ${SYMBIYOSYS_EN} != 0 ] && [ ! -e ${STAMPS}/${SYMBIYOSYS}.build ]; then
+    unpack ${SYMBIYOSYS}
+    if [ "x${SYMBIYOSYS_GIT}" == "x" ]; then
+        cd symbiyosys-${SYMBIYOSYS}
+    else
+        cd ${SYMBIYOSYS}
+    fi
+    log "Building ${SYMBIYOSYS}"
+    make ${PARALLEL} ${MAKEFLAGS} ${SYMBIYOSYSFLAGS} PREFIX=${PREFIX}
+    install-parallel ${SYMBIYOSYS} PREFIX=${PREFIX} install
+    cd ..
+    log "Cleaning up ${SYMBIYOSYS}"
+    touch ${STAMPS}/${SYMBIYOSYS}.build
+    if [ "x${SYMBIYOSYS_GIT}" == "x" ]; then
+        rm -rf symbiyosys-${SYMBIYOSYS}
+    else
+        rm -rf ${SYMBIYOSYS}
+    fi
+fi
+
+if [ ${YICES2_EN} != 0 ] && [ ! -e ${STAMPS}/${YICES2}.build ]; then
+    unpack ${YICES2}
+    cd ${YICES2}
+    log "Running autogen for ${YICES2}"
+    autoconf
+    log "configuring ${YICES2}"
+    ./configure --prefix=$PREFIX
+    log "Building ${YICES2}"
+    make ${PARALLEL} ${MAKEFLAGS}
+    install ${YICES2} install
+    cd ..
+    log "Cleaning up ${YICES2}"
+    touch ${STAMPS}/${YICES2}.build
+    rm -rf build/* ${YICES2}
+fi
+
+if [ ${Z3_EN} != 0 ] && [ ! -e ${STAMPS}/${Z3}.build ]; then
+    unpack ${Z3}
+    cd ${Z3}
+    log "configuring ${Z3}"
+    python scripts/mk_make.py --prefix=$PREFIX
+    log "Building ${Z3}"
+    cd build
+    make ${PARALLEL} ${MAKEFLAGS}
+    install ${Z3} install
+    cd ../..
+    log "Cleaning up ${Z3}"
+    touch ${STAMPS}/${Z3}.build
+    rm -rf build/* ${Z3}
+fi
+
+if [ ${AVY_EN} != 0 ] && [ ! -e ${STAMPS}/${AVY}.build ]; then
+    unpack ${AVY}
+    cd ${AVY}
+    log "submodule update"
+    git submodule update --init
+    log "configuring ${AVY}"
+    mkdir build
+    cd build
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    log "Building ${AVY}"
+    make ${PARALLEL} ${MAKEFLAGS}
+    cp avy/src/{avy,avybmc} $PREFIX/bin
+    cd ../..
+    log "Cleaning up ${AVY}"
+    touch ${STAMPS}/${AVY}.build
+    rm -rf build/* ${AVY}
+fi
+
+if [ ${BOOLECTOR_EN} != 0 ] && [ ! -e ${STAMPS}/${BOOLECTOR}.build ]; then
+    unpack ${BOOLECTOR}
+    cd ${BOOLECTOR}
+    log "configuring ${BOOLECTOR}"
+    ./contrib/setup-btor2tools.sh
+    ./contrib/setup-lingeling.sh
+    ./configure.sh
+    log "Building ${BOOLECTOR}"
+    make -C build ${PARALLEL} ${MAKEFLAGS}
+    cp build/bin/{boolector,btor*} $PREFIX/bin
+    cp deps/btor2tools/bin/btorsim $PREFIX/bin
+    cd ..
+    log "Cleaning up ${BOOLECTOR}"
+    touch ${STAMPS}/${BOOLECTOR}.build
+    rm -rf build/* ${BOOLECTOR}
+fi
+
+if [ ${VERILATOR_EN} != 0 ] && [ ! -e ${STAMPS}/${VERILATOR}.build ]; then
+    unpack ${VERILATOR}
+    cd ${VERILATOR}
+    log "configuring ${VERILATOR}"
+    autoconf
+    ./configure --prefix=$PREFIX
+    log "Building ${BOOLECTOR}"
+    make ${PARALLEL} ${MAKEFLAGS}
+    install-parallel ${VERILATOR} install
+    cd ..
+    log "Cleaning up ${VERILATOR}"
+    touch ${STAMPS}/${VERILATOR}.build
+    rm -rf build/* ${VERILATOR}
 fi
