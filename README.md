@@ -10,10 +10,15 @@ FPGA tools. These tools consist from:
 * arachne-pnr
 * icestorm
 * icarus-verilog
+* SymbiYosys
+* Yices2
+* Z3
+* Avy
+* Boolector
+* verilator
 
 More tools will be added over time. The current candidates are:
 
-* verilator
 * gtkwave
 
 This script is intended to not require super user privileges and installs all
@@ -38,10 +43,11 @@ sudo apt-get install git mercurial build-essential bison clang cmake \
                      libmpfr-dev libncurses5-dev libmpc-dev \
                      libreadline-dev zlib1g-dev pkg-config python \
                      python3 python3-dev tcl-dev autoconf gperf \
-                     qtbase5-dev libqt5opengl5-dev
+                     qtbase5-dev libqt5opengl5-dev \
+                     automake vim curl libfl2 libfl-dev
 ```
 
-### openSUSE
+### openSUSE (not yet update, maybe needs some other libs to be installed)
 
 ```
 zypper in  patterns-devel-python-devel_python3 patterns-devel-base-devel_basis \
@@ -57,7 +63,7 @@ zypper in  patterns-devel-python-devel_python3 patterns-devel-base-devel_basis \
            libboost_thread1_66_0-devel libboost_python-py3-1_66_0-devel
 ```
 
-### Mac OS
+### Mac OS (not yet updated, maybe needs some other libs to be installed
 
 XCode with command line tools.
 

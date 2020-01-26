@@ -1,5 +1,5 @@
 #!/bin/bash
-#source this file source to disable the building of tools listed below: (DEBUG ONLY)
+#source this file to disable the building of tools listed below: (DEBUG PURPOSE ONLY)
 export ICESTORM_EN=0
 export PRJTRELLIS_EN=0
 export ARACHNEPNR_EN=0
