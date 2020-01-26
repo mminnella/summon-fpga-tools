@@ -67,6 +67,8 @@ BOOLECTOR_GIT=${BOOLECTOR_GIT:-master}
 #Verilator
 VERILATOR_EN=${VERILATOR_EN:-1}
 VERILATOR_GIT=${VERILATOR_GIT:-master}
+
+#GTKWAVE
 GTKWAVE_EN=${GTKWAVE_EN:-1}
 GTKWAVE_GIT=${GTKWAVE_GIT:-master}
 
@@ -470,7 +472,7 @@ fi
 
 if [ ${AVY_EN} != 0 ]; then
         if [ "x${AVY_GIT}" == "x" ]; then
-                fetch ${Z3} https://bitbucket.org/arieg/avy/get/${Z3}.tar.gz
+                fetch ${AVY} https://bitbucket.org/arieg/avy/get/${AVY}.tar.gz
         else
                 clone avy ${AVY_GIT} https://bitbucket.org/arieg/extavy.git
         fi
@@ -478,7 +480,7 @@ fi
 
 if [ ${BOOLECTOR_EN} != 0 ]; then
         if [ "x${BOOLECTOR_GIT}" == "x" ]; then
-                fetch ${BOOLECTOR} https://github.com/boolector/boolector/archive/${Z3}.tar.gz
+                fetch ${BOOLECTOR} https://github.com/boolector/boolector/archive/${BOOLECTOR}.tar.gz
         else
                 clone boolector ${BOOLECTOR_GIT} git://github.com/boolector/boolector
         fi
@@ -486,11 +488,20 @@ fi
 
 if [ ${VERILATOR_EN} != 0 ]; then
         if [ "x${VERILATOR_GIT}" == "x" ]; then
-                fetch ${VERILATOR} https://github.com/verilator/verilator/archive/${Z3}.tar.gz
+                fetch ${VERILATOR} https://github.com/verilator/verilator/archive/${VERILATOR}.tar.gz
         else
                 clone verilator ${VERILATOR_GIT} git://github.com/verilator/verilator
         fi
 fi
+
+if [ ${GTKWAVE_EN} != 0 ]; then
+        if [ "x${GTKWAVE_GIT}" == "x" ]; then
+                fetch ${GTKWAVE} https://github.com/gtkwave/gtkwave/archive/${GTKWAVE}.tar.gz
+        else
+                clone gtkwave ${GTKWAVE_GIT} git://github.com/gtkwave/gtkwave
+        fi
+fi
+
 
 ##############################################################################
 # Build tools
@@ -701,4 +712,19 @@ if [ ${VERILATOR_EN} != 0 ] && [ ! -e ${STAMPS}/${VERILATOR}.build ]; then
     log "Cleaning up ${VERILATOR}"
     touch ${STAMPS}/${VERILATOR}.build
     rm -rf build/* ${VERILATOR}
+fi
+
+if [ ${GTKWAVE_EN} != 0 ] && [ ! -e ${STAMPS}/${GTKWAVE}.build ]; then
+    unpack ${GTKWAVE}
+    cd ${GTKWAVE}
+    cd gtkwave3-gtk3
+    log "configuring ${GTKWAVE}"
+    ./configure --prefix=$PREFIX --with-tcl=/usr/lib/tcl8.6 --with-tk=/usr/lib/tk8.6 --disable-mime-update
+    log "Building ${GTKWAVE}"
+    make ${PARALLEL} ${MAKEFLAGS}
+    install-parallel ${GTKWAVE} install
+    cd ../..
+    log "Cleaning up ${GTKWAVE}"
+    touch ${STAMPS}/${GTKWAVE}.build
+    rm -rf build/* ${GTKWAVE}
 fi

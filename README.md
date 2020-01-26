@@ -16,10 +16,11 @@ FPGA tools. These tools consist from:
 * Avy
 * Boolector
 * verilator
+* gtkwave
 
 More tools will be added over time. The current candidates are:
 
-* gtkwave
+* superprove
 
 This script is intended to not require super user privileges and installs all
 the tools into `${HOME}/sft` directory. Obviously you will need some rights to
@@ -34,7 +35,7 @@ releases of all the tools.
 You will need to install the following dependencies to be able to run this
 script.
 
-### Debian/Ubuntu/Mint/Raspbian
+### Debian/Ubuntu/Mint/Raspbian (tested on ubuntu 18.04)
 
 ```
 sudo apt-get install git mercurial build-essential bison clang cmake \
@@ -44,10 +45,11 @@ sudo apt-get install git mercurial build-essential bison clang cmake \
                      libreadline-dev zlib1g-dev pkg-config python \
                      python3 python3-dev tcl-dev autoconf gperf \
                      qtbase5-dev libqt5opengl5-dev \
-                     automake vim curl libfl2 libfl-dev
+                     automake vim curl libfl2 libfl-dev \
+                     tk-dev tcl-dev libbz2-dev liblzma-dev libgtk2.0-dev
 ```
 
-### openSUSE (not yet update, maybe needs some other libs to be installed)
+### openSUSE (not yet updated, maybe needs some other libs to be installed)
 
 ```
 zypper in  patterns-devel-python-devel_python3 patterns-devel-base-devel_basis \
@@ -63,7 +65,7 @@ zypper in  patterns-devel-python-devel_python3 patterns-devel-base-devel_basis \
            libboost_thread1_66_0-devel libboost_python-py3-1_66_0-devel
 ```
 
-### Mac OS (not yet updated, maybe needs some other libs to be installed
+### Mac OS (not yet updated, maybe needs some other libs to be installed)
 
 XCode with command line tools.
 
